@@ -12,7 +12,8 @@ import { handleError } from "../utils";
 export async function createUser(user: CreateUserParams) {
   try {
     await connect();
-    const newUser = await User.create(user);
+    const newUser = new User(user);
+    void (await newUser.save());
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
     handleError(error);

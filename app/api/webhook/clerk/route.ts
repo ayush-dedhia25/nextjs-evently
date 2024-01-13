@@ -7,7 +7,6 @@ import { Webhook } from "svix";
 import { createUser, deleteUser, updateUser } from "@/lib/actions/user.actions";
 
 export async function POST(req: Request) {
-  // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -45,13 +44,12 @@ export async function POST(req: Request) {
     }) as WebhookEvent;
   } catch (err) {
     console.error("Error verifying webhook:", err);
-    return new Response("Error occurred", {
-      status: 400,
-    });
+    return new Response("Error occurred", { status: 400 });
   }
 
   // Get the ID and type
   const eventType = evt.type;
+  console.log("🚀 ~ POST ~ eventType:", eventType);
 
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } =
@@ -66,7 +64,7 @@ export async function POST(req: Request) {
     };
 
     const newUser = await createUser(user);
-
+    console.log("🚀 ~ POST ~ newUser:", newUser);
     if (newUser) {
       await clerkClient.users.updateUserMetadata(id, {
         publicMetadata: { userId: newUser._id },
@@ -84,17 +82,13 @@ export async function POST(req: Request) {
       lastName: last_name,
       photo: image_url,
     };
-
     const updatedUser = await updateUser(id, user);
-
     return NextResponse.json({ message: "OK", user: updatedUser });
   }
 
   if (eventType === "user.deleted") {
     const { id } = evt.data;
-
     const deletedUser = await deleteUser(id!);
-
     return NextResponse.json({ message: "OK", user: deletedUser });
   }
 
