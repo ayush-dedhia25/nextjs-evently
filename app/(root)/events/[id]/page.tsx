@@ -61,7 +61,7 @@ async function EventDetails({ params: { id }, searchParams }: SearchParamProps) 
                   width={32}
                   height={32}
                 />
-                <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center">
+                <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-3">
                   <p>
                     {formatDateTime(event.startDateTime).dateOnly} -{" "}
                     {formatDateTime(event.startDateTime).timeOnly}
@@ -102,9 +102,9 @@ async function EventDetails({ params: { id }, searchParams }: SearchParamProps) 
           emptyTitle="No Events Found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
-          limit={6}
+          limit={3}
           page={1}
-          totalPages={2}
+          totalPages={relatedEvents?.totalPages}
         />
       </section>
     </>
