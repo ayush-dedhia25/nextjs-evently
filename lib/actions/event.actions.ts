@@ -22,6 +22,10 @@ async function populateEvent(query: any) {
     .populate({ path: "category", model: Category, select: "_id name" });
 }
 
+const getCategoryByName = async (name: string) => {
+  return Category.findOne({ name: { $regex: name, $options: "i" } });
+};
+
 export async function createEvent({ event, userId, path }: CreateEventParams) {
   console.log("🚀 ~ createEvent (action) ~ userId:", userId);
   try {
