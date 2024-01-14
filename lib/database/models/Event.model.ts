@@ -8,8 +8,8 @@ export interface IEvent extends mongoose.Document {
   imageUrl: string;
   startDateTime: Date;
   endDateTime: Date;
-  price?: string;
-  isFree: string;
+  price: string;
+  isFree: boolean;
   url?: string;
   category: { _id: string; name: string };
   organizer: { _id: string; firstName: string; lastName: string };
@@ -32,6 +32,6 @@ const eventSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Event = mongoose.model("Event", eventSchema);
+const Event = mongoose.models.Event || mongoose.model("Event", eventSchema);
 
 export default Event;
